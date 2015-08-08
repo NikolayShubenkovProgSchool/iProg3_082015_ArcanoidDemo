@@ -21,6 +21,7 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
 @property (nonatomic, strong) SKSpriteNode *desk;
 @property (nonatomic) BOOL isTouchingDesk;
 @property (nonatomic, strong) SKNode *bottomLine;
+@property (nonatomic) NSInteger score;
 
 @end
 
@@ -39,7 +40,8 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
         _ball.physicsBody.angularDamping = 0;
         _ball.physicsBody.allowsRotation = NO;
         _ball.physicsBody.categoryBitMask = PhysicsCategoryBall;
-        _ball.physicsBody.contactTestBitMask = PhysicsCategoryBottomLine;
+        _ball.physicsBody.contactTestBitMask = PhysicsCategoryBottomLine |
+                                               PhysicsCategoryBrick;
         _ball.position   = CGPointMake(100, 50);
     }
     return _ball;
@@ -177,12 +179,18 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
         secondBody = contact.bodyA;
     }
     
+    //Касание низа уровня
     if (firstBody.categoryBitMask == PhysicsCategoryBall &&
         secondBody.categoryBitMask == PhysicsCategoryBottomLine){
         NSLog(@"Game Over") ;
     }
     
-    
+    //Касание кирпича
+    if (firstBody.categoryBitMask == PhysicsCategoryBall &&
+        secondBody.categoryBitMask == PhysicsCategoryBrick){
+        [secondBody.node removeFromParent];
+        self.score++;
+    }
 }
 
 - (void)loadLevel
