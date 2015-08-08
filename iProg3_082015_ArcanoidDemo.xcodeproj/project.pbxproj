@@ -17,6 +17,8 @@
 		4F0C60451B75E69C00A145CF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F0C60431B75E69C00A145CF /* LaunchScreen.xib */; };
 		4F0C60511B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C60501B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.m */; };
 		4F8688581B76240500481C70 /* PL1Brick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8688571B76240500481C70 /* PL1Brick.m */; };
+		4FC7D3451B762D5C00CBE04A /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4FC7D3431B762D5C00CBE04A /* fire.sks */; };
+		4FC7D3461B762D5C00CBE04A /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC7D3441B762D5C00CBE04A /* spark.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		4F8688561B76240500481C70 /* PL1Brick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PL1Brick.h; sourceTree = "<group>"; };
 		4F8688571B76240500481C70 /* PL1Brick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PL1Brick.m; sourceTree = "<group>"; };
 		4F8688591B76248F00481C70 /* Contants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contants.h; sourceTree = "<group>"; };
+		4FC7D3431B762D5C00CBE04A /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
+		4FC7D3441B762D5C00CBE04A /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +98,8 @@
 				4F0C60341B75E69C00A145CF /* AppDelegate.m */,
 				4F0C60361B75E69C00A145CF /* GameScene.h */,
 				4F0C60371B75E69C00A145CF /* GameScene.m */,
+				4FC7D3431B762D5C00CBE04A /* fire.sks */,
+				4FC7D3441B762D5C00CBE04A /* spark.png */,
 				4F8688591B76248F00481C70 /* Contants.h */,
 				4F0C60391B75E69C00A145CF /* GameScene.sks */,
 				4F0C603B1B75E69C00A145CF /* GameViewController.h */,
@@ -215,7 +221,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F0C60451B75E69C00A145CF /* LaunchScreen.xib in Resources */,
+				4FC7D3461B762D5C00CBE04A /* spark.png in Resources */,
 				4F0C60421B75E69C00A145CF /* Images.xcassets in Resources */,
+				4FC7D3451B762D5C00CBE04A /* fire.sks in Resources */,
 				4F0C603A1B75E69C00A145CF /* GameScene.sks in Resources */,
 				4F0C60401B75E69C00A145CF /* Main.storyboard in Resources */,
 			);

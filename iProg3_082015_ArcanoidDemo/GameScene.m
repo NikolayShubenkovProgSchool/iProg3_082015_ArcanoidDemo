@@ -42,6 +42,7 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
         _ball.physicsBody.categoryBitMask = PhysicsCategoryBall;
         _ball.physicsBody.contactTestBitMask = PhysicsCategoryBottomLine |
                                                PhysicsCategoryBrick;
+        _ball.physicsBody.affectedByGravity = NO;
         _ball.position   = CGPointMake(100, 50);
     }
     return _ball;
@@ -188,7 +189,31 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
     //Касание кирпича
     if (firstBody.categoryBitMask == PhysicsCategoryBall &&
         secondBody.categoryBitMask == PhysicsCategoryBrick){
-        [secondBody.node removeFromParent];
+        
+        PL1Brick *aBrick = (PL1Brick *) secondBody.node;
+        aBrick.physicsBody = nil;
+
+        SKEmitterNode *fire = [self createFire];
+        [aBrick addChild:fire];
+        
+//        fire.position = aBrick.position;
+        
+        SKAction *scale  = [SKAction scaleBy:0 duration:1];
+
+        
+        SKAction *sequence = [SKAction sequence:@[scale]];
+        [aBrick runAction:sequence];
+        
+        [fire runAction:[SKAction waitForDuration:0.25]
+             completion:^{
+                 fire.particleBirthRate = 0;
+                 [fire runAction:[SKAction waitForDuration:1]
+                      completion:^{
+                              SKAction *remove = [SKAction removeFromParent];
+                          [aBrick runAction:remove];
+                          [fire removeFromParent];
+                      }];
+             }];
         self.score++;
     }
 }
@@ -199,6 +224,14 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
         PL1Brick *aBrick = [PL1Brick brickAtPoint:CGPointMake(x, CGRectGetHeight(self.frame) - 40)];
         [self addChild:aBrick];
     }
+}
+
+- (SKEmitterNode *)createFire
+{
+    NSString *pathToFire = [[NSBundle mainBundle] pathForResource:@"fire"
+                                                           ofType:@"sks"];
+    SKEmitterNode *fire = [NSKeyedUnarchiver unarchiveObjectWithFile:pathToFire];
+    return fire;
 }
 
 @end
