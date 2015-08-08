@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) SKSpriteNode *ball;
 @property (nonatomic, strong) SKSpriteNode *desk;
+@property (nonatomic) BOOL isTouchingDesk;
 
 @end
 
@@ -61,9 +62,45 @@
     self.desk.color = [UIColor purpleColor];
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    CGPoint touchLocation = [[touches anyObject] locationInNode:self];
     
+    //найдем все ноды в точке касания
+    NSArray *nodes = [self nodesAtPoint:touchLocation];
+    
+    //если среди нодов, которых коснулись есть доска
+    self.isTouchingDesk = [nodes containsObject:self.desk];
+}
+
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (!self.isTouchingDesk){
+        return;
+    }
+    UITouch *aTouch = [touches anyObject];
+    //Считаем текущую и предыдущую точки касания
+    CGPoint currentPoint = [aTouch locationInNode:self];
+    CGPoint prevPoint    = [aTouch previousLocationInNode:self];
+    
+    //В соответствии с ними переместрим доску
+    
+    CGFloat delta = currentPoint.x - prevPoint.x;
+    CGFloat newX = self.desk.position.x + delta;
+    
+    CGPoint newPosition = CGPointMake(newX, self.desk.position.y);
+    
+    self.desk.position = newPosition;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+
 }
 
 -(void)update:(CFTimeInterval)currentTime {
