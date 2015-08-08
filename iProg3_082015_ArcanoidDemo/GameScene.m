@@ -161,6 +161,8 @@ typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
         secondBody.categoryBitMask == PhysicsCategoryBottomLine){
         NSLog(@"Game Over") ;
     }
+    
+    
 }
 
 @end
