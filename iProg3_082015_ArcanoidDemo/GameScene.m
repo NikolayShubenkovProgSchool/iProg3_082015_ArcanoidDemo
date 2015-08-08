@@ -8,6 +8,13 @@
 
 #import "GameScene.h"
 
+#import "Contants.h"
+#import "PL1Brick.h"
+
+static const CGFloat kMnAllowedXYSpeed = 20;
+//в слчае когда мяч возле самой стены
+static const CGFloat kSeedToSetForBallNearWall = 80;
+
 @interface GameScene () <SKPhysicsContactDelegate>
 
 @property (nonatomic, strong) SKSpriteNode *ball;
@@ -16,13 +23,6 @@
 @property (nonatomic, strong) SKNode *bottomLine;
 
 @end
-
-typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
-    PhysicsCategoryBall       = 1,
-    PhysicsCategoryBottomLine = 1 << 1,
-    PhysicsCategoryBrick      = 1 << 2,
-    PhysicsCategoryDesk       = 1 << 3
-};
 
 @implementation GameScene
 
@@ -40,6 +40,7 @@ typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
         _ball.physicsBody.allowsRotation = NO;
         _ball.physicsBody.categoryBitMask = PhysicsCategoryBall;
         _ball.physicsBody.contactTestBitMask = PhysicsCategoryBottomLine;
+        _ball.position   = CGPointMake(100, 50);
     }
     return _ball;
 }
@@ -89,6 +90,8 @@ typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
     [self.ball.physicsBody applyImpulse:CGVectorMake(15, -10)];
     self.desk.color = [UIColor purpleColor];
     [self addChild:self.bottomLine];
+    
+    [self loadLevel];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -142,7 +145,24 @@ typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
 }
 
 -(void)update:(CFTimeInterval)currentTime {
-    
+    if (fabs(self.ball.physicsBody.velocity.dx) < kMnAllowedXYSpeed){
+        CGVector velocity     = self.ball.physicsBody.velocity;
+        SKPhysicsBody *abody  = self.ball.physicsBody;
+        self.ball.physicsBody = nil;
+        velocity.dx           = self.ball.position.x > 200 ? -kSeedToSetForBallNearWall :
+        kSeedToSetForBallNearWall;
+        abody.velocity        = velocity;
+        self.ball.physicsBody = abody;
+    }
+    if (fabs(self.ball.physicsBody.velocity.dy) < kMnAllowedXYSpeed){
+        CGVector velocity     = self.ball.physicsBody.velocity;
+        SKPhysicsBody *abody  = self.ball.physicsBody;
+        self.ball.physicsBody = nil;
+        velocity.dy           = -kSeedToSetForBallNearWall;
+        abody.velocity        = velocity;
+        self.ball.physicsBody = abody;
+
+    }
 }
 
 #pragma mark - PhysycsWorld Delegate
@@ -163,6 +183,14 @@ typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
     }
     
     
+}
+
+- (void)loadLevel
+{
+    for (CGFloat x = 40; x < CGRectGetWidth(self.frame) - 30; x += 30){
+        PL1Brick *aBrick = [PL1Brick brickAtPoint:CGPointMake(x, CGRectGetHeight(self.frame) - 40)];
+        [self addChild:aBrick];
+    }
 }
 
 @end

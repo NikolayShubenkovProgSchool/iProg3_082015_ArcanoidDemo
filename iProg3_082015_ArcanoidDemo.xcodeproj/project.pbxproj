@@ -16,6 +16,7 @@
 		4F0C60421B75E69C00A145CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F0C60411B75E69C00A145CF /* Images.xcassets */; };
 		4F0C60451B75E69C00A145CF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F0C60431B75E69C00A145CF /* LaunchScreen.xib */; };
 		4F0C60511B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C60501B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.m */; };
+		4F8688581B76240500481C70 /* PL1Brick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8688571B76240500481C70 /* PL1Brick.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,9 @@
 		4F0C604A1B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iProg3_082015_ArcanoidDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F0C604F1B75E69C00A145CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F0C60501B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iProg3_082015_ArcanoidDemoTests.m; sourceTree = "<group>"; };
+		4F8688561B76240500481C70 /* PL1Brick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PL1Brick.h; sourceTree = "<group>"; };
+		4F8688571B76240500481C70 /* PL1Brick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PL1Brick.m; sourceTree = "<group>"; };
+		4F8688591B76248F00481C70 /* Contants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,11 +94,14 @@
 				4F0C60341B75E69C00A145CF /* AppDelegate.m */,
 				4F0C60361B75E69C00A145CF /* GameScene.h */,
 				4F0C60371B75E69C00A145CF /* GameScene.m */,
+				4F8688591B76248F00481C70 /* Contants.h */,
 				4F0C60391B75E69C00A145CF /* GameScene.sks */,
 				4F0C603B1B75E69C00A145CF /* GameViewController.h */,
 				4F0C603C1B75E69C00A145CF /* GameViewController.m */,
 				4F0C603E1B75E69C00A145CF /* Main.storyboard */,
 				4F0C60411B75E69C00A145CF /* Images.xcassets */,
+				4F8688561B76240500481C70 /* PL1Brick.h */,
+				4F8688571B76240500481C70 /* PL1Brick.m */,
 				4F0C60431B75E69C00A145CF /* LaunchScreen.xib */,
 				4F0C602F1B75E69C00A145CF /* Supporting Files */,
 			);
@@ -229,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F0C603D1B75E69C00A145CF /* GameViewController.m in Sources */,
+				4F8688581B76240500481C70 /* PL1Brick.m in Sources */,
 				4F0C60351B75E69C00A145CF /* AppDelegate.m in Sources */,
 				4F0C60381B75E69C00A145CF /* GameScene.m in Sources */,
 				4F0C60321B75E69C00A145CF /* main.m in Sources */,
@@ -428,6 +436,7 @@
 				4F0C60561B75E69C00A145CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4F0C60571B75E69C00A145CF /* Build configuration list for PBXNativeTarget "iProg3_082015_ArcanoidDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -436,6 +445,7 @@
 				4F0C60591B75E69C00A145CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
