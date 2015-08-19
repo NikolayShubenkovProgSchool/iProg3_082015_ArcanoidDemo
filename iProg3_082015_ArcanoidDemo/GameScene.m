@@ -8,20 +8,22 @@
 
 #import "GameScene.h"
 
-#import "Contants.h"
+#import "Constants.h"
 #import "PL1Brick.h"
+#import "PL1Bonus.h"
 
 static const CGFloat kMnAllowedXYSpeed = 20;
 //в слчае когда мяч возле самой стены
 static const CGFloat kSpeedToSetForBallNearWall = 40;
 
-@interface GameScene () <SKPhysicsContactDelegate>
+@interface GameScene () <SKPhysicsContactDelegate, PL1BonusDelegate>
 
 @property (nonatomic, strong) SKSpriteNode *ball;
 @property (nonatomic, strong) SKSpriteNode *desk;
 @property (nonatomic) BOOL isTouchingDesk;
 @property (nonatomic, strong) SKNode *bottomLine;
 @property (nonatomic) NSInteger score;
+@property (nonatomic, strong) NSArray *bonuses;
 
 @end
 
@@ -257,28 +259,30 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
 - (SKNode *)bonusFromPoint:(CGPoint)aPoint
 {
     if (arc4random() % 1 == 0){
-        SKSpriteNode *bonusNode = [SKSpriteNode spriteNodeWithColor:[UIColor yellowColor] size:CGSizeMake(40, 40)];
-        bonusNode.position = aPoint;
         
-        SKPhysicsBody *aBody = [SKPhysicsBody bodyWithRectangleOfSize:bonusNode.size];
-        aBody.restitution    = 1;
-        aBody.linearDamping  = 0;
-        aBody.angularDamping = 0;
-        aBody.allowsRotation = NO;
-        aBody.dynamic        = YES;
-        aBody.categoryBitMask  = PhysicsCategoryBonus;
-        aBody.collisionBitMask = 0;
-        aBody.contactTestBitMask = PhysicsCategoryDesk;
-        bonusNode.physicsBody  = aBody;
-
-        [bonusNode runAction:[SKAction moveTo:CGPointMake(arc4random() % (int) CGRectGetWidth(self.frame), 0) duration:3] completion:^{
-            
+        PL1Bonus *bonus = [PL1Bonus bonusWithPosition:aPoint type:PL1BonusTypeFire];
+        [bonus runAction:[SKAction moveTo:CGPointMake(arc4random() % (int) CGRectGetWidth(self.frame), 0) duration:3] completion:^{
         }];
         
-        [self addChild:bonusNode];
-        return bonusNode;
+        bonus.delegate = self;
+        self.bonuses = [[NSArray arrayWithArray:self.bonuses] arrayByAddingObject:bonus];
+        
+        [self addChild:bonus];
+        return bonus;
     }
     return nil;
+}
+
+#pragma mark
+
+- (void)pl1_bonusDidExpired:(PL1Bonus *)bonus
+{
+    NSMutableArray *bonuses = [NSMutableArray arrayWithArray:self.bonuses];
+    
+    [bonuses removeObject:bonus];
+    
+    self.bonuses = [bonuses copy];
+    NSLog(@"Bonus expired");
 }
 
 @end

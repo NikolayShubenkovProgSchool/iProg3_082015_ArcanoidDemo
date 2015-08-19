@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F01D5011B843C9B00A73125 /* PL1Bonus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F01D5001B843C9B00A73125 /* PL1Bonus.m */; };
 		4F0C60321B75E69C00A145CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C60311B75E69C00A145CF /* main.m */; };
 		4F0C60351B75E69C00A145CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C60341B75E69C00A145CF /* AppDelegate.m */; };
 		4F0C60381B75E69C00A145CF /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C60371B75E69C00A145CF /* GameScene.m */; };
@@ -32,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F01D4FF1B843C9B00A73125 /* PL1Bonus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PL1Bonus.h; path = ../PL1Bonus.h; sourceTree = "<group>"; };
+		4F01D5001B843C9B00A73125 /* PL1Bonus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PL1Bonus.m; path = ../PL1Bonus.m; sourceTree = "<group>"; };
 		4F0C602C1B75E69C00A145CF /* iProg3_082015_ArcanoidDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iProg3_082015_ArcanoidDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F0C60301B75E69C00A145CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F0C60311B75E69C00A145CF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -50,7 +53,7 @@
 		4F0C60501B75E69C00A145CF /* iProg3_082015_ArcanoidDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iProg3_082015_ArcanoidDemoTests.m; sourceTree = "<group>"; };
 		4F8688561B76240500481C70 /* PL1Brick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PL1Brick.h; sourceTree = "<group>"; };
 		4F8688571B76240500481C70 /* PL1Brick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PL1Brick.m; sourceTree = "<group>"; };
-		4F8688591B76248F00481C70 /* Contants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contants.h; sourceTree = "<group>"; };
+		4F8688591B76248F00481C70 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4FC7D3431B762D5C00CBE04A /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
 		4FC7D3441B762D5C00CBE04A /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,13 +97,15 @@
 		4F0C602E1B75E69C00A145CF /* iProg3_082015_ArcanoidDemo */ = {
 			isa = PBXGroup;
 			children = (
+				4F01D4FF1B843C9B00A73125 /* PL1Bonus.h */,
+				4F01D5001B843C9B00A73125 /* PL1Bonus.m */,
 				4F0C60331B75E69C00A145CF /* AppDelegate.h */,
 				4F0C60341B75E69C00A145CF /* AppDelegate.m */,
 				4F0C60361B75E69C00A145CF /* GameScene.h */,
 				4F0C60371B75E69C00A145CF /* GameScene.m */,
 				4FC7D3431B762D5C00CBE04A /* fire.sks */,
 				4FC7D3441B762D5C00CBE04A /* spark.png */,
-				4F8688591B76248F00481C70 /* Contants.h */,
+				4F8688591B76248F00481C70 /* Constants.h */,
 				4F0C60391B75E69C00A145CF /* GameScene.sks */,
 				4F0C603B1B75E69C00A145CF /* GameViewController.h */,
 				4F0C603C1B75E69C00A145CF /* GameViewController.m */,
@@ -246,6 +251,7 @@
 				4F0C603D1B75E69C00A145CF /* GameViewController.m in Sources */,
 				4F8688581B76240500481C70 /* PL1Brick.m in Sources */,
 				4F0C60351B75E69C00A145CF /* AppDelegate.m in Sources */,
+				4F01D5011B843C9B00A73125 /* PL1Bonus.m in Sources */,
 				4F0C60381B75E69C00A145CF /* GameScene.m in Sources */,
 				4F0C60321B75E69C00A145CF /* main.m in Sources */,
 			);

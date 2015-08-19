@@ -7,7 +7,7 @@
 //
 
 #import "PL1Brick.h"
-#import "Contants.h"
+#import "Constants.h"
 
 @implementation PL1Brick
 
