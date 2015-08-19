@@ -13,7 +13,7 @@
 
 static const CGFloat kMnAllowedXYSpeed = 20;
 //в слчае когда мяч возле самой стены
-static const CGFloat kSeedToSetForBallNearWall = 80;
+static const CGFloat kSpeedToSetForBallNearWall = 40;
 
 @interface GameScene () <SKPhysicsContactDelegate>
 
@@ -42,8 +42,9 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
         _ball.physicsBody.categoryBitMask = PhysicsCategoryBall;
         _ball.physicsBody.contactTestBitMask = PhysicsCategoryBottomLine |
                                                PhysicsCategoryBrick;
+        _ball.physicsBody.collisionBitMask   = PhysicsCategoryDesk | PhysicsCategoryBrick;
         _ball.physicsBody.affectedByGravity = NO;
-        _ball.position   = CGPointMake(100, 50);
+        _ball.position   = CGPointMake(100, 100);
     }
     return _ball;
 }
@@ -85,12 +86,15 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
 - (void)didMoveToView:(SKView *)view {
     SKPhysicsBody *border = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
     border.friction       = 0;
+    border.linearDamping  = 0;
+    border.angularDamping = 0;
+    border.restitution    = 1;
     self.physicsBody      = border;
     
     self.physicsWorld.gravity = CGVectorMake(0, 0);
     self.physicsWorld.contactDelegate = self;
     
-    [self.ball.physicsBody applyImpulse:CGVectorMake(15, -10)];
+    [self.ball.physicsBody applyImpulse:CGVectorMake(8, 10)];
     self.desk.color = [UIColor purpleColor];
     [self addChild:self.bottomLine];
     
@@ -148,23 +152,38 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
 }
 
 -(void)update:(CFTimeInterval)currentTime {
+    
+    //test for x velocity
     if (fabs(self.ball.physicsBody.velocity.dx) < kMnAllowedXYSpeed){
         CGVector velocity     = self.ball.physicsBody.velocity;
         SKPhysicsBody *abody  = self.ball.physicsBody;
         self.ball.physicsBody = nil;
-        velocity.dx           = self.ball.position.x > 200 ? -kSeedToSetForBallNearWall :
-        kSeedToSetForBallNearWall;
+        velocity.dx           = self.ball.position.x > 200 ? -kSpeedToSetForBallNearWall :
+        kSpeedToSetForBallNearWall;
         abody.velocity        = velocity;
         self.ball.physicsBody = abody;
     }
+    //test for y velocity
     if (fabs(self.ball.physicsBody.velocity.dy) < kMnAllowedXYSpeed){
         CGVector velocity     = self.ball.physicsBody.velocity;
         SKPhysicsBody *abody  = self.ball.physicsBody;
         self.ball.physicsBody = nil;
-        velocity.dy           = -kSeedToSetForBallNearWall;
+        velocity.dy           = self.ball.position.y < 200 ? kSpeedToSetForBallNearWall : -kSpeedToSetForBallNearWall;
         abody.velocity        = velocity;
         self.ball.physicsBody = abody;
-
+    }
+    //get speed and update if it too small
+    CGFloat speed = sqrt(pow(self.ball.physicsBody.velocity.dy, 2) + pow(self.ball.physicsBody.velocity.dx, 2));
+    if (speed < 200){
+        SKPhysicsBody *ballBody = self.ball.physicsBody;
+        self.ball.physicsBody   = nil;
+        CGVector updatedVelocity = ballBody.velocity;
+        updatedVelocity.dx /= speed;
+        updatedVelocity.dy /= speed;
+        updatedVelocity.dx *= 200;
+        updatedVelocity.dy *= 200;
+        ballBody.velocity = updatedVelocity;
+        self.ball.physicsBody = ballBody;
     }
 }
 
@@ -196,22 +215,19 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
         SKEmitterNode *fire = [self createFire];
         [aBrick addChild:fire];
         
-//        fire.position = aBrick.position;
-        
         SKAction *scale  = [SKAction scaleBy:0 duration:1];
 
-        
         SKAction *sequence = [SKAction sequence:@[scale]];
         [aBrick runAction:sequence];
+        
+        [self bonusFromPoint:aBrick.position];
         
         [fire runAction:[SKAction waitForDuration:0.25]
              completion:^{
                  fire.particleBirthRate = 0;
                  [fire runAction:[SKAction waitForDuration:1]
                       completion:^{
-                              SKAction *remove = [SKAction removeFromParent];
-                          [aBrick runAction:remove];
-                          [fire removeFromParent];
+                          [aBrick removeFromParent];
                       }];
              }];
         self.score++;
@@ -220,9 +236,13 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
 
 - (void)loadLevel
 {
-    for (CGFloat x = 40; x < CGRectGetWidth(self.frame) - 30; x += 30){
-        PL1Brick *aBrick = [PL1Brick brickAtPoint:CGPointMake(x, CGRectGetHeight(self.frame) - 40)];
-        [self addChild:aBrick];
+    CGFloat y = CGRectGetHeight(self.frame) - 40;
+    
+    for (int i = 0; i < 8; i ++, y-= 30) {
+        for (CGFloat x = (i % 2) == 0 ? 40 : 20; x < CGRectGetWidth(self.frame) - 30; x += 30){
+            PL1Brick *aBrick = [PL1Brick brickAtPoint:CGPointMake(x, y)];
+            [self addChild:aBrick];
+        }
     }
 }
 
@@ -232,6 +252,33 @@ static const CGFloat kSeedToSetForBallNearWall = 80;
                                                            ofType:@"sks"];
     SKEmitterNode *fire = [NSKeyedUnarchiver unarchiveObjectWithFile:pathToFire];
     return fire;
+}
+
+- (SKNode *)bonusFromPoint:(CGPoint)aPoint
+{
+    if (arc4random() % 1 == 0){
+        SKSpriteNode *bonusNode = [SKSpriteNode spriteNodeWithColor:[UIColor yellowColor] size:CGSizeMake(40, 40)];
+        bonusNode.position = aPoint;
+        
+        SKPhysicsBody *aBody = [SKPhysicsBody bodyWithRectangleOfSize:bonusNode.size];
+        aBody.restitution    = 1;
+        aBody.linearDamping  = 0;
+        aBody.angularDamping = 0;
+        aBody.allowsRotation = NO;
+        aBody.dynamic        = YES;
+        aBody.categoryBitMask  = PhysicsCategoryBonus;
+        aBody.collisionBitMask = 0;
+        aBody.contactTestBitMask = PhysicsCategoryDesk;
+        bonusNode.physicsBody  = aBody;
+
+        [bonusNode runAction:[SKAction moveTo:CGPointMake(arc4random() % (int) CGRectGetWidth(self.frame), 0) duration:3] completion:^{
+            
+        }];
+        
+        [self addChild:bonusNode];
+        return bonusNode;
+    }
+    return nil;
 }
 
 @end

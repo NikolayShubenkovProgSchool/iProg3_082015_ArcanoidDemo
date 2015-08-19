@@ -10,10 +10,11 @@
 #define iProg3_082015_ArcanoidDemo_Contants_h
 
 typedef NS_OPTIONS(uint32_t, PhysicsCategory) {
-    PhysicsCategoryBall       = 1,
+    PhysicsCategoryBall       = 1 << 0,
     PhysicsCategoryBottomLine = 1 << 1,
     PhysicsCategoryBrick      = 1 << 2,
-    PhysicsCategoryDesk       = 1 << 3
+    PhysicsCategoryDesk       = 1 << 3,
+    PhysicsCategoryBonus      = 1 << 4
 };
 
 #endif
