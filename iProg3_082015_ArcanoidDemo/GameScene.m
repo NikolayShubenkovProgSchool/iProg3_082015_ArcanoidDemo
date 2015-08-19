@@ -64,6 +64,7 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
         
         _desk.physicsBody.dynamic        = NO;
         _desk.physicsBody.categoryBitMask = PhysicsCategoryDesk;
+        _desk.physicsBody.contactTestBitMask = PhysicsCategoryBonus;
         NSParameterAssert(_desk);
     }
     return _desk;
@@ -234,6 +235,22 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
              }];
         self.score++;
     }
+    //бонус и нижняя черта
+    if (firstBody.categoryBitMask == PhysicsCategoryBottomLine &&
+        secondBody.categoryBitMask == PhysicsCategoryBonus){
+        secondBody.contactTestBitMask = 0;
+        [secondBody.node runAction:[SKAction fadeAlphaBy:0 duration:0.4]completion:^{
+            [secondBody.node removeFromParent];
+            NSLog(@"removed bonus");
+        }];
+    }
+    
+    // доска и бонус
+    if (firstBody.categoryBitMask == PhysicsCategoryDesk &&
+        secondBody.categoryBitMask == PhysicsCategoryBonus){
+        NSLog(@"touched bonus");
+        self.bonuses = [[NSArray arrayWithArray:self.bonuses] arrayByAddingObject:secondBody.node];
+    }
 }
 
 - (void)loadLevel
@@ -265,7 +282,6 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
         }];
         
         bonus.delegate = self;
-        self.bonuses = [[NSArray arrayWithArray:self.bonuses] arrayByAddingObject:bonus];
         
         [self addChild:bonus];
         return bonus;

@@ -35,15 +35,19 @@
     aBody.dynamic        = YES;
     aBody.categoryBitMask  = PhysicsCategoryBonus;
     aBody.collisionBitMask = 0;
-    aBody.contactTestBitMask = PhysicsCategoryDesk;
+    aBody.contactTestBitMask = PhysicsCategoryDesk | PhysicsCategoryBottomLine;
     bonus.physicsBody  = aBody;
     
-    bonus.timer = [NSTimer scheduledTimerWithTimeInterval:bonus.lifetime
-                                                   target:bonus
-                                                 selector:@selector(expire:)
-                                                 userInfo:nil
-                                                  repeats:NO];
     return bonus;
+}
+
+- (void)startExpiring
+{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.lifetime
+                                                  target:self
+                                                selector:@selector(expire:)
+                                                userInfo:nil
+                                                 repeats:NO];
 }
 
 - (void)expire:(NSTimer *)timer
