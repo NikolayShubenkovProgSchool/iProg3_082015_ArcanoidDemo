@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, PL1BonusType) {
 @property (nonatomic) NSTimeInterval lifetime;
 
 - (void)startExpiring;
+- (void)resetExpireTime;
 + (instancetype)bonusWithPosition:(CGPoint)poisition type:(PL1BonusType)type;
 
 @end

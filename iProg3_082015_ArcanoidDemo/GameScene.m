@@ -24,6 +24,7 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
 @property (nonatomic, strong) SKNode *bottomLine;
 @property (nonatomic) NSInteger score;
 @property (nonatomic, strong) NSArray *bonuses;
+@property (nonatomic, strong) SKEmitterNode *fire;
 
 @end
 
@@ -188,6 +189,37 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
         ballBody.velocity = updatedVelocity;
         self.ball.physicsBody = ballBody;
     }
+    self.fire.position = self.ball.position;
+}
+
+#pragma mark - PL1Bonus Delegate
+
+- (void)pl1_bonusDidExpired:(PL1Bonus *)bonus
+{
+    [self p_removeBonus:bonus];
+}
+
+- (void)p_removeBonus:(PL1Bonus *)bonus
+{
+    NSMutableArray *modifiedBonuses = [NSMutableArray arrayWithArray:self.bonuses];
+    [modifiedBonuses removeObject:bonus];
+    self.bonuses = [modifiedBonuses copy];
+    
+    switch (bonus.type) {
+        case PL1BonusTypeFire:{
+            SKEmitterNode *aFire = self.fire;
+            aFire.particleBirthRate = 0;
+            [aFire runAction:[SKAction fadeAlphaTo:0 duration:0.5] completion:^{
+                [aFire removeFromParent];
+            }];
+            NSLog(@"fire finished");
+            self.fire = nil;
+            break;
+        }
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - PhysycsWorld Delegate
@@ -214,25 +246,28 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
         
         PL1Brick *aBrick = (PL1Brick *) secondBody.node;
         aBrick.physicsBody = nil;
-
-        SKEmitterNode *fire = [self createFire];
-        [aBrick addChild:fire];
         
-        SKAction *scale  = [SKAction scaleBy:0 duration:1];
-
-        SKAction *sequence = [SKAction sequence:@[scale]];
-        [aBrick runAction:sequence];
+        if (self.fire){
+            SKEmitterNode *fire = [self createFire];
+            [aBrick addChild:fire];
+            [fire runAction:[SKAction waitForDuration:0.25]
+                 completion:^{
+                     fire.particleBirthRate = 0;
+                 }];
+            SKAction *scale  = [SKAction scaleBy:0 duration:1];
+            
+            [aBrick runAction:scale completion:^{
+                [aBrick removeFromParent];
+            }];
+        }
+        else {
+            [aBrick runAction:[SKAction fadeAlphaTo:0 duration:0.25]completion:^{
+                [aBrick removeFromParent];
+            }];
+        }
         
         [self bonusFromPoint:aBrick.position];
         
-        [fire runAction:[SKAction waitForDuration:0.25]
-             completion:^{
-                 fire.particleBirthRate = 0;
-                 [fire runAction:[SKAction waitForDuration:1]
-                      completion:^{
-                          [aBrick removeFromParent];
-                      }];
-             }];
         self.score++;
     }
     //бонус и нижняя черта
@@ -249,7 +284,33 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
     if (firstBody.categoryBitMask == PhysicsCategoryDesk &&
         secondBody.categoryBitMask == PhysicsCategoryBonus){
         NSLog(@"touched bonus");
-        self.bonuses = [[NSArray arrayWithArray:self.bonuses] arrayByAddingObject:secondBody.node];
+        [self addBonus:(PL1Bonus *)secondBody.node];
+    }
+}
+
+- (void)addBonus:(PL1Bonus *)newBonus
+{
+    for (PL1Bonus *aBonus in self.bonuses) {
+        if (aBonus.type == newBonus.type){
+            [aBonus resetExpireTime];
+            return;
+        }
+    }
+    
+    newBonus.delegate = self;
+    [newBonus startExpiring];
+    self.bonuses = [[NSArray arrayWithArray:self.bonuses] arrayByAddingObject:newBonus];
+
+    switch (newBonus.type){
+            case PL1BonusTypeFire :{
+                self.fire = [self createFire];
+                [self addChild:self.fire];
+                self.fire.targetNode = self;
+                self.fire.position = self.ball.position;
+            }
+            case PL1BonusTypeLargedesk: {
+            
+            }
     }
 }
 
@@ -275,7 +336,7 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
 
 - (SKNode *)bonusFromPoint:(CGPoint)aPoint
 {
-    if (arc4random() % 1 == 0){
+    if (arc4random() % 10 == 0){
         
         PL1Bonus *bonus = [PL1Bonus bonusWithPosition:aPoint type:PL1BonusTypeFire];
         [bonus runAction:[SKAction moveTo:CGPointMake(arc4random() % (int) CGRectGetWidth(self.frame), 0) duration:3] completion:^{
@@ -291,14 +352,14 @@ static const CGFloat kSpeedToSetForBallNearWall = 40;
 
 #pragma mark
 
-- (void)pl1_bonusDidExpired:(PL1Bonus *)bonus
-{
-    NSMutableArray *bonuses = [NSMutableArray arrayWithArray:self.bonuses];
-    
-    [bonuses removeObject:bonus];
-    
-    self.bonuses = [bonuses copy];
-    NSLog(@"Bonus expired");
-}
+//- (void)pl1_bonusDidExpired:(PL1Bonus *)bonus
+//{
+//    NSMutableArray *bonuses = [NSMutableArray arrayWithArray:self.bonuses];
+//    
+//    [bonuses removeObject:bonus];
+//    
+//    self.bonuses = [bonuses copy];
+//    NSLog(@"Bonus expired");
+//}
 
 @end

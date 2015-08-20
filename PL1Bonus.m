@@ -41,6 +41,12 @@
     return bonus;
 }
 
+- (void)resetExpireTime
+{
+    [self.timer invalidate];
+    [self startExpiring];
+}
+
 - (void)startExpiring
 {
     self.timer = [NSTimer scheduledTimerWithTimeInterval:self.lifetime
